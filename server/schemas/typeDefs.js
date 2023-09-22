@@ -1,69 +1,39 @@
+// import 'gql' function from 'apollo-server-express' library
 const { gql } = require('apollo-server-express');
 
+// GraphQL type definitions using gql template literal
 const typeDefs = gql`
-  type Category {
-    _id: ID
-    name: String
-  }
-
-  type Product {
-    _id: ID
-    name: String
-    description: String
-    image: String
-    quantity: Int
-    price: Float
-    category: Category
-  }
-
-  type Order {
-    _id: ID
-    purchaseDate: String
-    products: [Product]
-  }
-
   type User {
     _id: ID
-    firstName: String
-    lastName: String
-    email: String
-    orders: [Order]
+    username: String!
+    email: String!
   }
 
-  type Checkout {
-    session: ID
+  type Translation {
+    _id: ID!
+    text: String!
+    language: String!
+    user: User!
   }
 
-  type Auth {
-    token: ID
-    user: User
-  }
-
-  input ProductInput {
-    _id: ID
-    purchaseQuantity: Int
-    name: String
-    image: String
-    price: Float
-    quantity: Int
-  }
-
+  # query to retrieve user by username and list of translations
   type Query {
-    categories: [Category]
-    products(category: ID, name: String): [Product]
-    product(_id: ID!): Product
-    user: User
-    order(_id: ID!): Order
-    checkout(products: [ProductInput]): Checkout
+    getUser(username: String!): User
+    getTranslations: [Translation]
   }
 
+  # mutation to create new user and new translation
   type Mutation {
-    addUser(firstName: String!, lastName: String!, email: String!, password: String!): Auth
-    addOrder(products: [ID]!): Order
-    updateUser(firstName: String, lastName: String, email: String, password: String): User
-    updateProduct(_id: ID!, quantity: Int!): Product
+    createUser(username: String!, email: String!, password: String!): Auth
+    createTranslation(text: String!, language: String!): Translation
     login(email: String!, password: String!): Auth
+  }
+  # authentication
+  type Auth {
+    token: String!
+    user: User!
   }
 `;
 
+// export typeDefs for use in Apollo Server
 module.exports = typeDefs;
