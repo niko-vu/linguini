@@ -23,7 +23,7 @@ The deployed application should look something like this:
 
 ![Screenshot of the application.](/assets/media/screenshot.png)
 
-Click [here](...) for the deployed application.
+Click [here](https://sleepy-falls-58292-6e9dbe7eb148.herokuapp.com/) for the deployed application.
 
 ## Credits
 
