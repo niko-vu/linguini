@@ -1,5 +1,3 @@
-package.json
-
 # dependencies
 /node_modules
 /.pnp
@@ -21,3 +19,11 @@ package.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# lock files
+package-lock.json
+yarn.lock
+
+.DS_Store
+.vscode
+*.xslx

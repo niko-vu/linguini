@@ -1,26 +1,27 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Translation } = require('../models');
+const { User, Phrase } = require('../models');
 const { signToken } = require('../utils/auth');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcrypt');
 
 const resolvers = {
   Query: {
-    // query to get user's translations by username
-    getUserTranslations: async (_, { username }) => {
+    // query to get user's translated phrases by username
+    getUser: async (_, { _id }) => {
       try {
-        // find user by username
-        const user = await User.findOne({ username });
-
-        if (!user) {
-          throw new Error('User not found');
-        }
-
-        // retrieve translations associated with user
-        const translations = await Translation.find({ user: user._id });
-
-        return translations;
+        // Use the User model to find a user by ID
+        const user = await User.findById(_id);
+        return user; // Return the found user
       } catch (error) {
-        throw new Error('Error fetching user translations: ' + error.message);
+        throw new Error(`Error fetching user: ${error}`);
+      }
+    },
+    getPhrases: async (_, { language }) => {
+      try {
+        // Use the Phrase model to find phrases by language
+        const phrases = await Phrase.find({ language });
+        return phrases; // Return the found phrases
+      } catch (error) {
+        throw new Error(`Error fetching phrases: ${error}`);
       }
     },
   },
@@ -37,14 +38,14 @@ const resolvers = {
           throw new Error('User with this username or email already exists');
         }
 
-        // has password before saving it to database
+        // hash password before saving it to database
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
 
         // generate a JWT token and return it along with user object
-        const token = 'placeholder-jwt-token'; // replace with actual JWT token generation
+        const token = signToken(newUser); // replace with actual JWT token generation
 
         return { token, user: newUser };
       } catch (error) {
@@ -52,51 +53,20 @@ const resolvers = {
       }
     },
 
-    // mutation to create a translation
-    createTranslation: async (_, { text, language }, context) => {
+    // mutation to create a phrase
+    createPhrase: async (_, { text, translation, language }) => {
       try {
-        // check if user is authenticated
-        if (!context.user) {
-          throw new Error('Authentication required to create a translation');
-        }
-
-        // get authenticated user's ID from context
-        const userId = context.user._id;
-
-        // create a new translation and associate it with the user
-        const translation = new Translation({
-          text,
-          language,
-          user: userId,
-        });
-
-        await translation.save();
-
-        return translation;
+        // Create a new phrase using the Phrase model
+        const phrase = new Phrase({ text, translation, language });
+        
+        await phrase.save(); // Save the phrase to the database
+        return phrase; // Return the created phrase
       } catch (error) {
-        throw new Error('Error creating translation: ' + error.message);
+        throw new Error(`Error creating phrase: ${error}`);
       }
-    },
-
-    // mutation to log user in
-    login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
-
-      if (!user) {
-        throw new AuthenticationError('Incorrect credentials');
-      }
-
-      const correctPw = await user.isCorrectPassword(password);
-
-      if (!correctPw) {
-        throw new AuthenticationError('Incorrect credentials');
-      }
-
-      const token = signToken(user);
-
-      return { token, user };
     },
   },
-};
+  };
+
 
 module.exports = resolvers;
