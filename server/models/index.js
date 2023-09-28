@@ -1,6 +1,6 @@
 const User = require('./User');
-const Product = require('./translate');
+const translation = require('./translate');
 const Category = require('./Category');
-const Order = require('./language');
+const language = require('./language');
 
-module.exports = { User, translate, Category, language };
+module.exports = { User, translation, Category, language };
