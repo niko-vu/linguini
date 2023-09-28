@@ -9,29 +9,30 @@ const typeDefs = gql`
     email: String!
   }
 
-  type Translation {
+  type Phrase {
     _id: ID!
     text: String!
+    translation: String!
     language: String!
+    user: User!
+  }
+
+  type AuthPayload {
+    token: String!
     user: User!
   }
 
   # query to retrieve user by username and list of translations
   type Query {
-    getUser(username: String!): User
-    getTranslations: [Translation]
+    getUser(_id: ID!): User
+    getPhrases(language: String!): [Phrase]
   }
 
   # mutation to create new user and new translation
   type Mutation {
-    createUser(username: String!, email: String!, password: String!): Auth
-    createTranslation(text: String!, language: String!): Translation
-    login(email: String!, password: String!): Auth
-  }
-  # authentication
-  type Auth {
-    token: String!
-    user: User!
+    createUser(username: String!, email: String!, password: String!): AuthPayload
+    createPhrase(text: String!, translation: String!, language: String!): Phrase
+    login(email: String!, password: String!): AuthPayload
   }
 `;
 
