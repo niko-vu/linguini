@@ -67,10 +67,6 @@ function App() {
                 path="/profiles/:username" 
                 element={<Profile />}
               />
-              <Route 
-                path="/thoughts/:thoughtId" 
-                element={<SingleThought />}
-              />
             </Routes>
           </div>
           <Footer />
