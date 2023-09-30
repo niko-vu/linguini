@@ -1,8 +1,7 @@
 const db = require('./connection');
-const { User, Product, Category } = require('../models');
+const { User, Translation, language } = require('../models');
 const mongoose = require('mongoose');
-const User = require('./models/User');
-const Translation = require('./models/translate');
+
 
 // connect to MongoDB database
 mongoose.connect('mongodb://localhost/linguini', { useNewUrlParser: true, useUnifiedTopology: true });
@@ -41,7 +40,7 @@ const translationsData = [
 async function seedDatabase() {
   try{
     // insert sample data into the collections
-    const users = await user>insertMany(usersData);
+    const users = await User.insertMany(usersData);
     const translations = await Translation.insertMany(translationsData);
 
     console.log('Database seeded successfully.');

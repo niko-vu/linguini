@@ -24,19 +24,14 @@ export const ADD_USER = gql`
   }
 `;
 
-export const ADD_THOUGHT = gql`
-  mutation addThought($thoughtText: String!) {
-    addThought(thoughtText: $thoughtText) {
-      _id
-      thoughtText
-      thoughtAuthor
-      createdAt
-      comments {
-        _id
-        commentText
-      }
-    }
+export const CREATE_NOTE = gql`
+mutation CreateNote($input: NoteInput!) {
+  createNote(input: $input) {
+    _id
+    text
+    language
   }
+}
 `;
 
 export const ADD_COMMENT = gql`
