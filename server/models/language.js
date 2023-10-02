@@ -2,19 +2,18 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const orderSchema = new Schema({
-  purchaseDate: {
-    type: Date,
-    default: Date.now
+const languageSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
   },
-  products: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Product'
-    }
-  ]
+  code: {
+    type: String,
+    required: true,
+    unique: true,
+  },
 });
 
-const Order = mongoose.model('Order', orderSchema);
+const Language = mongoose.model('Language', languageSchema);
 
-module.exports = Order;
+module.exports = Language;
