@@ -1,49 +1,49 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const PhraseList = ({
-  phrases,
+const ThoughtList = ({
+  thoughts,
   title,
   showTitle = true,
   showUsername = true,
 }) => {
-  if (!phrases.length) {
-    return <h3>No Phrases Yet</h3>;
+  if (!thoughts.length) {
+    return <h3>No Thoughts Yet</h3>;
   }
 
   return (
     <div>
       {showTitle && <h3>{title}</h3>}
-      {phrases &&
-        phrases.map((phrase) => (
-          <div key={phrase._id} className="card mb-3">
+      {thoughts &&
+        thoughts.map((thought) => (
+          <div key={thought._id} className="card mb-3">
             <h4 className="card-header bg-primary text-light p-2 m-0">
               {showUsername ? (
                 <Link
                   className="text-light"
-                  to={`/profiles/${phrase.phraseAuthor}`}
+                  to={`/profiles/${thought.thoughtAuthor}`}
                 >
-                  {phrase.phraseAuthor} <br />
+                  {thought.thoughtAuthor} <br />
                   <span style={{ fontSize: '1rem' }}>
-                    added this phrase on {phrase.createdAt}
+                    had this thought on {thought.createdAt}
                   </span>
                 </Link>
               ) : (
                 <>
                   <span style={{ fontSize: '1rem' }}>
-                    You added this phrase on {phrase.createdAt}
+                    You had this thought on {thought.createdAt}
                   </span>
                 </>
               )}
             </h4>
             <div className="card-body bg-light p-2">
-              <p>{phrase.phraseText}</p>
+              <p>{thought.thoughtText}</p>
             </div>
             <Link
               className="btn btn-primary btn-block btn-squared"
-              to={`/phrases/${phrase._id}`}
+              to={`/thoughts/${thought._id}`}
             >
-              Practice and Learn More
+              Join the discussion on this thought.
             </Link>
           </div>
         ))}
@@ -51,4 +51,4 @@ const PhraseList = ({
   );
 };
 
-export default PhraseList;
+export default ThoughtList;

@@ -1,16 +1,15 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import PhraseList from '../components/PhraseList'; 
-import PhraseForm from '../components/PhraseForm'; 
+import ThoughtList from '../components/ThoughtList';
+import ThoughtForm from '../components/ThoughtForm';
 
-import { QUERY_PHRASES } from '../utils/queries'; 
+import { QUERY_THOUGHTS } from '../utils/queries';
 
 const Home = () => {
-  const { loading, data } = useQuery(QUERY_PHRASES, {
-    variables: { language: "English" },
-  });
-  const phrases = data?.getPhrases || []; 
+  const { loading, data } = useQuery(QUERY_THOUGHTS);
+  const thoughts = data?.thoughts || [];
+
   return (
     <main>
       <div className="flex-row justify-center">
@@ -18,15 +17,15 @@ const Home = () => {
           className="col-12 col-md-10 mb-3 p-3"
           style={{ border: '1px dotted #1a1a1a' }}
         >
-          <PhraseForm /> 
+          <ThoughtForm />
         </div>
         <div className="col-12 col-md-8 mb-3">
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <PhraseList
-              phrases={phrases} 
-              title="Language Learning Phrases" 
+            <ThoughtList
+              thoughts={thoughts}
+              title="Some Feed for Thought(s)..."
             />
           )}
         </div>

@@ -5,8 +5,6 @@ import {
   ApolloProvider,
   createHttpLink,
 } from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
-
 import { setContext } from '@apollo/client/link/context';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -17,17 +15,6 @@ import Profile from './pages/Profile';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-// error link to handle GraphQL errors
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    graphQLErrors.forEach(({ message }) => {
-      console.error(`GraphQL Error: ${message}`);
-    });
-  }
-  if (networkError) {
-    console.error(`Network Error: ${networkError}`);
-  }
-});
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -48,7 +35,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
-  link: errorLink.concat(authLink).concat(httpLink),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
