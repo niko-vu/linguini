@@ -7,7 +7,6 @@ const typeDefs = gql`
     _id: ID
     username: String!
     email: String!
-    notes: [Note]
   }
 
   type Phrase {
@@ -15,12 +14,7 @@ const typeDefs = gql`
     text: String!
     translation: String!
     language: String!
-    createdAt: String! 
     user: User!
-  }
-  type Note {
-    _id: ID!
-    noteText: String!
   }
 
   type AuthPayload {
@@ -30,15 +24,13 @@ const typeDefs = gql`
 
   # query to retrieve user by username and list of translations
   type Query {
-    getUser(username: String!): User
+    getUser(_id: ID!): User
     getPhrases(language: String!): [Phrase]
-    getNotes: [Note]  
-    getSingleNote(noteId: ID!): Note  
-    me: User
   }
+
   # mutation to create new user and new translation
   type Mutation {
-    addUser(username: String!, email: String!, password: String!): AuthPayload
+    createUser(username: String!, email: String!, password: String!): AuthPayload
     createPhrase(text: String!, translation: String!, language: String!): Phrase
     login(email: String!, password: String!): AuthPayload
   }

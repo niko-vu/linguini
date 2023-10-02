@@ -27,7 +27,7 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (_, { username, email, password }) => {
+    createUser: async (_, { username, email, password }) => {
       try {
         // check if user with same username or email already exists
         const existingUser = await User.findOne({
@@ -50,31 +50,6 @@ const resolvers = {
         return { token, user: newUser };
       } catch (error) {
         throw new Error('Error creating user: ' + error.message);
-      }
-    },
-
-
-    login: async (_, { email, password }) => {
-      try {
-        // Find the user by email
-        const user = await User.findOne({ email });
-    
-        if (!user) {
-          throw new AuthenticationError('User not found');
-        }
-    
-        // Compare the provided password with the hashed password in the database
-        const correctPassword = await bcrypt.compare(password, user.password);
-    
-        if (!correctPassword) {
-          throw new AuthenticationError('Incorrect password');
-        }
-    
-        // If the password is correct, generate and return the JWT token
-        const token = signToken(user);
-        return { token, user };
-      } catch (error) {
-        throw new AuthenticationError(`Error logging in: ${error.message}`);
       }
     },
 

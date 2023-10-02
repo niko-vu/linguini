@@ -24,13 +24,33 @@ export const ADD_USER = gql`
   }
 `;
 
-export const CREATE_PHRASE = gql`
-  mutation createPhrase($text: String!, $translation: String!, $language: String!) {
-    createPhrase(text: $text, translation: $translation, language: $language) {
+export const ADD_THOUGHT = gql`
+  mutation addThought($thoughtText: String!) {
+    addThought(thoughtText: $thoughtText) {
       _id
-      text
-      translation
-      language
+      thoughtText
+      thoughtAuthor
+      createdAt
+      comments {
+        _id
+        commentText
+      }
+    }
+  }
+`;
+
+export const ADD_COMMENT = gql`
+  mutation addComment($thoughtId: ID!, $commentText: String!) {
+    addComment(thoughtId: $thoughtId, commentText: $commentText) {
+      _id
+      thoughtText
+      thoughtAuthor
+      createdAt
+      comments {
+        _id
+        commentText
+        createdAt
+      }
     }
   }
 `;
