@@ -53,6 +53,31 @@ const resolvers = {
       }
     },
 
+
+    login: async (_, { email, password }) => {
+      try {
+        // Find the user by email
+        const user = await User.findOne({ email });
+    
+        if (!user) {
+          throw new AuthenticationError('User not found');
+        }
+    
+        // Compare the provided password with the hashed password in the database
+        const correctPassword = await bcrypt.compare(password, user.password);
+    
+        if (!correctPassword) {
+          throw new AuthenticationError('Incorrect password');
+        }
+    
+        // If the password is correct, generate and return the JWT token
+        const token = signToken(user);
+        return { token, user };
+      } catch (error) {
+        throw new AuthenticationError(`Error logging in: ${error.message}`);
+      }
+    },
+
     // mutation to create a phrase
     createPhrase: async (_, { text, translation, language }) => {
       try {

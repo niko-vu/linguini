@@ -7,8 +7,10 @@ import PhraseForm from '../components/PhraseForm';
 import { QUERY_PHRASES } from '../utils/queries'; 
 
 const Home = () => {
-  const { loading, data } = useQuery(QUERY_PHRASES); 
-  const phrases = data?.phrases || []; 
+  const { loading, data } = useQuery(QUERY_PHRASES, {
+    variables: { language: "English" },
+  });
+  const phrases = data?.getPhrases || []; 
   return (
     <main>
       <div className="flex-row justify-center">
