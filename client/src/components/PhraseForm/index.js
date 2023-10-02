@@ -3,23 +3,23 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 import { CREATE_NOTE } from '../../utils/mutations';
-import { QUERY_THOUGHTS, QUERY_ME } from '../../utils/queries';
+import { QUERY_NOTES, QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
-const ThoughtForm = () => {
+const NotesForm = () => {
   const [thoughtText, setThoughtText] = useState('');
 
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [addThought, { error }] = useMutation(CREATE_NOTE, {
-    update(cache, { data: { addThought } }) {
+  const [createNote, { error }] = useMutation(CREATE_NOTE, {
+    update(cache, { data: { createNote } }) {
       try {
-        const { thoughts } = cache.readQuery({ query: QUERY_THOUGHTS });
+        const { thoughts } = cache.readQuery({ query: QUERY_NOTES });
 
         cache.writeQuery({
-          query: QUERY_THOUGHTS,
-          data: { thoughts: [addThought, ...thoughts] },
+          query: QUERY_NOTES,
+          data: { thoughts: [createNote, ...thoughts] },
         });
       } catch (e) {
         console.error(e);
@@ -29,7 +29,7 @@ const ThoughtForm = () => {
       const { me } = cache.readQuery({ query: QUERY_ME });
       cache.writeQuery({
         query: QUERY_ME,
-        data: { me: { ...me, thoughts: [...me.thoughts, addThought] } },
+        data: { me: { ...me, thoughts: [...me.thoughts, createNote] } },
       });
     },
   });
@@ -38,7 +38,7 @@ const ThoughtForm = () => {
     event.preventDefault();
 
     try {
-      const { data } = await addThought({
+      const { data } = await createNote({
         variables: {
           thoughtText,
           thoughtAuthor: Auth.getProfile().data.username,
@@ -110,4 +110,4 @@ const ThoughtForm = () => {
   );
 };
 
-export default ThoughtForm;
+export default NotesForm;
