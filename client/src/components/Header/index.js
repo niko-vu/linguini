@@ -8,6 +8,10 @@ const Header = () => {
     event.preventDefault();
     Auth.logout();
   };
+
+  // Get the username from the JWT token payload
+  const username = Auth.getProfile()?.username;
+
   return (
     <header className="bg-primary text-light mb-4 py-3 flex-row align-center">
       <div className="container flex-row justify-space-between-lg justify-center align-center">
@@ -21,7 +25,7 @@ const Header = () => {
           {Auth.loggedIn() ? (
             <>
               <Link className="btn btn-lg btn-info m-2" to="/me">
-                {Auth.getProfile().data.username}'s profile
+                {username ? `${username}'s profile` : 'Profile'}
               </Link>
               <button className="btn btn-lg btn-light m-2" onClick={logout}>
                 Logout
