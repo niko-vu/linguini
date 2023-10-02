@@ -2,34 +2,34 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { ADD_THOUGHT } from '../../utils/mutations';
-import { QUERY_THOUGHTS, QUERY_ME } from '../../utils/queries';
+import { CREATE_PHRASE } from '../../utils/mutations';
+import { QUERY_PHRASES, QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
-const ThoughtForm = () => {
-  const [thoughtText, setThoughtText] = useState('');
+const PhraseForm = () => {
+  const [text, setText] = useState('');
 
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [addThought, { error }] = useMutation(ADD_THOUGHT, {
-    update(cache, { data: { addThought } }) {
+  const [createPhrase, { error }] = useMutation(CREATE_PHRASE, {
+    update(cache, { data: { createPhrase } }) {
       try {
-        const { thoughts } = cache.readQuery({ query: QUERY_THOUGHTS });
+        const { phrases } = cache.readQuery({ query: QUERY_PHRASES });
 
         cache.writeQuery({
-          query: QUERY_THOUGHTS,
-          data: { thoughts: [addThought, ...thoughts] },
+          query: QUERY_PHRASES,
+          data: { phrases: [createPhrase, ...phrases] },
         });
       } catch (e) {
         console.error(e);
       }
 
-      // update me object's cache
+      // Update me object's cache
       const { me } = cache.readQuery({ query: QUERY_ME });
       cache.writeQuery({
         query: QUERY_ME,
-        data: { me: { ...me, thoughts: [...me.thoughts, addThought] } },
+        data: { me: { ...me, phrases: [...me.phrases, createPhrase] } },
       });
     },
   });
@@ -38,14 +38,16 @@ const ThoughtForm = () => {
     event.preventDefault();
 
     try {
-      const { data } = await addThought({
+      const { data } = await createPhrase({
         variables: {
-          thoughtText,
-          thoughtAuthor: Auth.getProfile().data.username,
+          text,
+          translation: 'Your translation goes here', // You can replace this with your translation logic
+          language: 'Language Name', // Replace with the selected language
         },
       });
 
-      setThoughtText('');
+      setText('');
+      setCharacterCount(0);
     } catch (err) {
       console.error(err);
     }
@@ -54,15 +56,15 @@ const ThoughtForm = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'thoughtText' && value.length <= 280) {
-      setThoughtText(value);
+    if (name === 'text' && value.length <= 280) {
+      setText(value);
       setCharacterCount(value.length);
     }
   };
 
   return (
     <div>
-      <h3>What is the language and phrase you're trying to learn?</h3>
+      <h3>What's the language and phrase you're trying to learn?</h3>
 
       {Auth.loggedIn() ? (
         <>
@@ -79,9 +81,9 @@ const ThoughtForm = () => {
           >
             <div className="col-12 col-lg-9">
               <textarea
-                name="thoughtText"
-                placeholder="Here's a new thought..."
-                value={thoughtText}
+                name="text"
+                placeholder="Enter the phrase you want to learn..."
+                value={text}
                 className="form-input w-100"
                 style={{ lineHeight: '1.5', resize: 'vertical' }}
                 onChange={handleChange}
@@ -90,7 +92,7 @@ const ThoughtForm = () => {
 
             <div className="col-12 col-lg-3">
               <button className="btn btn-primary btn-block py-3" type="submit">
-                Add Thought
+                Add Phrase
               </button>
             </div>
             {error && (
@@ -102,7 +104,7 @@ const ThoughtForm = () => {
         </>
       ) : (
         <p>
-          You need to be logged in to share your thoughts. Please{' '}
+          You need to be logged in to translate and save phrases. Please{' '}
           <Link to="/login">login</Link> or <Link to="/signup">signup.</Link>
         </p>
       )}
@@ -110,4 +112,4 @@ const ThoughtForm = () => {
   );
 };
 
-export default ThoughtForm;
+export default PhraseForm;

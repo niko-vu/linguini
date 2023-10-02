@@ -1,20 +1,28 @@
 const mongoose = require('mongoose');
-
 const { Schema } = mongoose;
 
-const translationSchema = new Schema({
-  text: {
+const noteSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  phrase: {
     type: String,
     required: true,
-    trim: true
   },
-  language: {
+  translatedPhrase: {
     type: String,
     required: true,
-    trim: true
   },
+  targetLanguage: {
+    type: Schema.Types.ObjectId,
+    ref: 'Language',
+    required: true,
+  },
+  // You can include additional note-related fields here
 });
 
-const Translation = mongoose.model('Translation', translationSchema);
+const Note = mongoose.model('Note', noteSchema);
 
-module.exports = Translation;
+module.exports = Note;
