@@ -2,34 +2,34 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { CREATE_NOTE } from '../../utils/mutations';
-import { QUERY_NOTES, QUERY_ME } from '../../utils/queries';
+import { CREATE_PHRASE } from '../../utils/mutations';
+import { QUERY_PHRASES, QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
-const NotesForm = () => {
-  const [thoughtText, setThoughtText] = useState('');
+const PhraseForm = () => {
+  const [text, setText] = useState('');
 
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [createNote, { error }] = useMutation(CREATE_NOTE, {
-    update(cache, { data: { createNote } }) {
+  const [createPhrase, { error }] = useMutation(CREATE_PHRASE, {
+    update(cache, { data: { createPhrase } }) {
       try {
-        const { thoughts } = cache.readQuery({ query: QUERY_NOTES });
+        const { phrases } = cache.readQuery({ query: QUERY_PHRASES });
 
         cache.writeQuery({
-          query: QUERY_NOTES,
-          data: { thoughts: [createNote, ...thoughts] },
+          query: QUERY_PHRASES,
+          data: { phrases: [createPhrase, ...phrases] },
         });
       } catch (e) {
         console.error(e);
       }
 
-      // update me object's cache
+      // Update me object's cache
       const { me } = cache.readQuery({ query: QUERY_ME });
       cache.writeQuery({
         query: QUERY_ME,
-        data: { me: { ...me, thoughts: [...me.thoughts, createNote] } },
+        data: { me: { ...me, phrases: [...me.phrases, createPhrase] } },
       });
     },
   });
@@ -38,14 +38,16 @@ const NotesForm = () => {
     event.preventDefault();
 
     try {
-      const { data } = await createNote({
+      const { data } = await createPhrase({
         variables: {
-          thoughtText,
-          thoughtAuthor: Auth.getProfile().data.username,
+          text,
+          translation: 'Your translation goes here', // You can replace this with your translation logic
+          language: 'Language Name', // Replace with the selected language
         },
       });
 
-      setThoughtText('');
+      setText('');
+      setCharacterCount(0);
     } catch (err) {
       console.error(err);
     }
@@ -54,8 +56,8 @@ const NotesForm = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'thoughtText' && value.length <= 280) {
-      setThoughtText(value);
+    if (name === 'text' && value.length <= 280) {
+      setText(value);
       setCharacterCount(value.length);
     }
   };
@@ -79,9 +81,9 @@ const NotesForm = () => {
           >
             <div className="col-12 col-lg-9">
               <textarea
-                name="thoughtText"
-                placeholder="Here's a new thought..."
-                value={thoughtText}
+                name="text"
+                placeholder="Enter the phrase you want to learn..."
+                value={text}
                 className="form-input w-100"
                 style={{ lineHeight: '1.5', resize: 'vertical' }}
                 onChange={handleChange}
@@ -90,7 +92,7 @@ const NotesForm = () => {
 
             <div className="col-12 col-lg-3">
               <button className="btn btn-primary btn-block py-3" type="submit">
-                Add Thought
+                Add Phrase
               </button>
             </div>
             {error && (
@@ -110,4 +112,4 @@ const NotesForm = () => {
   );
 };
 
-export default NotesForm;
+export default PhraseForm;

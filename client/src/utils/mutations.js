@@ -24,14 +24,13 @@ export const ADD_USER = gql`
   }
 `;
 
-export const CREATE_NOTE = gql`
-mutation CreateNote($input: NoteInput!) {
-  createNote(input: $input) {
-    _id
-    text
-    language
+export const CREATE_PHRASE = gql`
+  mutation createPhrase($text: String!, $translation: String!, $language: String!) {
+    createPhrase(text: $text, translation: $translation, language: $language) {
+      _id
+      text
+      translation
+      language
+    }
   }
-}
 `;
-
-

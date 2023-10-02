@@ -30,10 +30,10 @@ const typeDefs = gql`
 
   # mutation to create new user and new translation
   type Mutation {
-    createUser(username: String!, email: String!, password: String!): AuthPayload
-    createPhrase(text: String!, translation: String!, language: String!): Phrase
-    login(email: String!, password: String!): AuthPayload
-  }
+  addUser(username: String!, email: String!, password: String!): AuthPayload
+  createPhrase(text: String!, translation: String!, language: String!): Phrase
+  login(email: String!, password: String!): AuthPayload
+}
 `;
 
 // export typeDefs for use in Apollo Server
