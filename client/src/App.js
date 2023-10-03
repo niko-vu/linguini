@@ -56,7 +56,8 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div className="flex-column justify-flex-start min-100-vh">
+        <div className="flex-column justify-flex-start min-100-vh"
+          style={{ width: '50%', margin: 'auto' }}>
           <Header />
           <div className="container">
             <Routes>

@@ -1,6 +1,6 @@
 {
-  "short_name": "Linguini",
-  "name": "Create Linguini App",
+  "short_name": "linguini",
+  "name": "createlinguiniapp",
   "icons": [
     {
       "src": "favicon.ico",

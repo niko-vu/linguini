@@ -8,13 +8,9 @@ const Header = () => {
     event.preventDefault();
     Auth.logout();
   };
-
-  // Get the username from the JWT token payload
-  const username = Auth.getProfile()?.username;
-
   return (
     <header className="text-light mb-4 py-3 flex-row align-center"
-      style={{ backgroundColor: '#76a5b8', borderRadius: '10px' }}>
+      style={{ backgroundColor: '#76a5b8', borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
       <div className="container flex-row justify-space-between-lg justify-center align-center">
         <div>
           <Link className="text-light" to="/">
@@ -26,7 +22,7 @@ const Header = () => {
           {Auth.loggedIn() ? (
             <>
               <Link className="btn btn-lg btn-info m-2" to="/me">
-                {username ? `${username}'s profile` : 'Profile'}
+                {Auth.getProfile().data.username}'s profile
               </Link>
               <button className="btn btn-lg btn-light m-2" onClick={logout}>
                 Logout
