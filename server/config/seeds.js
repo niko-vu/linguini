@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 
 // connect to MongoDB database
-mongoose.connect('mongodb://localhost:27017/linguini', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost/linguini', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const usersData = [
   {
