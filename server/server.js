@@ -1,8 +1,7 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
-// const mongoose = require('mongoose');
-// mongoose.connect(process.env.MONGO_URI);
+const mongoose = require('mongoose');
 
 const { authMiddleware } = require('./utils/auth');
 
