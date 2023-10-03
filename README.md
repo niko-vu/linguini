@@ -10,7 +10,7 @@ The motivation for creating a project like Linguini came from acknowledging the 
 
 The deployed application should look something like this:
 
-![Screenshot of the application.](https://files.slack.com/files-pri/T04RL4BTMHD-F05UEMV9GKH/image.png)
+![Screenshot of the application.](https://64.media.tumblr.com/b6159a7dbcf89bab90c5d6a623f0ae3f/0e7e72ac00b3a469-7c/s540x810/cb72a0372d009fd3fb5aab9e696b1b03dbc595d4.pnj)
 
 Click [here](https://sleepy-falls-58292-6e9dbe7eb148.herokuapp.com/) for the deployed application.
 
