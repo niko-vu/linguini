@@ -2,34 +2,34 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { CREATE_PHRASE } from '../../utils/mutations';
-import { QUERY_PHRASES, QUERY_ME } from '../../utils/queries';
+import { CREATE_NOTE } from '../../utils/mutations';
+import { QUERY_NOTES, QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
-const PhraseForm = () => {
-  const [text, setText] = useState('');
+const NotesForm = () => {
+  const [thoughtText, setThoughtText] = useState('');
 
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [createPhrase, { error }] = useMutation(CREATE_PHRASE, {
-    update(cache, { data: { createPhrase } }) {
+  const [createNote, { error }] = useMutation(CREATE_NOTE, {
+    update(cache, { data: { createNote } }) {
       try {
-        const { phrases } = cache.readQuery({ query: QUERY_PHRASES });
+        const { thoughts } = cache.readQuery({ query: QUERY_NOTES });
 
         cache.writeQuery({
-          query: QUERY_PHRASES,
-          data: { phrases: [createPhrase, ...phrases] },
+          query: QUERY_NOTES,
+          data: { thoughts: [createNote, ...thoughts] },
         });
       } catch (e) {
         console.error(e);
       }
 
-      // Update me object's cache
+      // update me object's cache
       const { me } = cache.readQuery({ query: QUERY_ME });
       cache.writeQuery({
         query: QUERY_ME,
-        data: { me: { ...me, phrases: [...me.phrases, createPhrase] } },
+        data: { me: { ...me, thoughts: [...me.thoughts, createNote] } },
       });
     },
   });
@@ -38,16 +38,14 @@ const PhraseForm = () => {
     event.preventDefault();
 
     try {
-      const { data } = await createPhrase({
+      const { data } = await createNote({
         variables: {
-          text,
-          translation: 'Your translation goes here', // You can replace this with your translation logic
-          language: 'Language Name', // Replace with the selected language
+          thoughtText,
+          thoughtAuthor: Auth.getProfile().data.username,
         },
       });
 
-      setText('');
-      setCharacterCount(0);
+      setThoughtText('');
     } catch (err) {
       console.error(err);
     }
@@ -56,8 +54,8 @@ const PhraseForm = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'text' && value.length <= 280) {
-      setText(value);
+    if (name === 'thoughtText' && value.length <= 280) {
+      setThoughtText(value);
       setCharacterCount(value.length);
     }
   };
@@ -81,9 +79,9 @@ const PhraseForm = () => {
           >
             <div className="col-12 col-lg-9">
               <textarea
-                name="text"
-                placeholder="Enter the phrase you want to learn..."
-                value={text}
+                name="thoughtText"
+                placeholder="Here's a new thought..."
+                value={thoughtText}
                 className="form-input w-100"
                 style={{ lineHeight: '1.5', resize: 'vertical' }}
                 onChange={handleChange}
@@ -92,7 +90,7 @@ const PhraseForm = () => {
 
             <div className="col-12 col-lg-3">
               <button className="btn btn-primary btn-block py-3" type="submit">
-                Add Phrase
+                Add Thought
               </button>
             </div>
             {error && (
@@ -112,4 +110,4 @@ const PhraseForm = () => {
   );
 };
 
-export default PhraseForm;
+export default NotesForm;

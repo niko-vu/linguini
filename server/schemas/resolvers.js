@@ -27,7 +27,7 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (_, { username, email, password }) => {
+    createUser: async (_, { username, email, password }) => {
       try {
         // check if user with same username or email already exists
         const existingUser = await User.findOne({
