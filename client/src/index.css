@@ -1030,21 +1030,21 @@ a:hover {
 }
 
 .btn.btn-info {
-  background-color: #1bbc9b;
-  color: #ffffff;
+  background-color: #D9E9E8;
+  color: #1a1a1a;
 }
 
 .btn.btn-info:hover {
-  background-color: #31e1bd;
+  background-color: #a5c5bf;
 }
 
 .btn.btn-light {
-  background-color: #d9e9e8;
+  background-color: #D9E9E8;
   color: #1a1a1a;
 }
 
 .btn.btn-light:hover {
-  background-color: #84b8b4;
+  background-color: #a5c5bf;
 }
 
 .btn.btn-dark {
@@ -1084,7 +1084,7 @@ a:hover {
 }
 
 .card {
-  border: 1px solid #1a1a1a;
+  border: 1px solid #ffffff00;
   margin-bottom: 1rem;
 }
 
